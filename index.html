@@ -5,10 +5,15 @@
     <meta charset="utf-8">
     <title>vr-shikumen</title>
     <meta name="description" content="Hello, World! • A-Frame">
+    
+    <!--aframe and its friends-->
     <script src="node_modules/aframe/build/aframe.js"></script>
-    <!--script src="node_modules/aframe-template-component/dist/aframe-template-component.min.js"></script-->
+    <!--script src="node_modules/aframe-draw-component/dist/aframe-draw-component.min.js"></script-->
+    <!--script src="node_modules/aframe-textwrap-component/dist/aframe-textwrap-component.min.js"></script-->
+    <!--script src="node_modules/aframe-text-component/dist/aframe-text-component.min.js"></script-->
+    
+    <!--other logical stuff-->
     <script src="node_modules/ismobilejs/isMobile.min.js"></script>
-    <script src="node_modules/zepto/zepto.min.js"></script>
     <script src="node_modules/mustache/mustache.min.js"></script>
     <script src="node_modules/yamljs/dist/yaml.min.js"></script>
     
@@ -38,14 +43,23 @@
     <a-scene>
         <a-assets>
             <img id="up-arrow" src="/assets/uparrow.gif">
-                <script id="arrow-template" type="text/template">
-        {{#arrows}}
-        <a-image class="clicker" opacity="0.5" src="#up-arrow" position="{{position}}" rotation="{{rotation}}" linktarget="{{target}}"  onclick="loadPanoramaImage('{{target}}')">
-            <a-event name="mouseenter" opacity="1"></a-event>
-            <a-event name="mouseleave" opacity="0.5"></a-event>
-        </a-image>
-        {{/arrows}}
-    </script>
+            <img id="hourglass" src="assets/hourglass.gif">
+            <script id="arrow-template" type="text/template">
+                {{#arrows}}
+                    <a-image class="arrow-clicker" opacity="0.5" src="#up-arrow" position="{{position}}" rotation="{{rotation}}" linktarget="{{target}}"  onclick="loadPanoramaImage('{{target}}')">
+                        <a-event name="mouseenter" opacity="1"></a-event>
+                        <a-event name="mouseleave" opacity="0.5"></a-event>
+                    </a-image>
+                {{/arrows}}
+            </script>
+            
+            <!--the opacity mumbo jumbo sets a default value of 1-->
+            <script id="stickies-template" type="text/template">
+                {{#stickies}}
+                    <a-image class="stickie-image" opacity="{{opacity}}{{^opacity}}1{{/opacity}}" src="{{source}}" position="{{position}}" rotation="{{rotation}}"> 
+                    </a-image>
+                {{/stickies}}
+            </script>
         </a-assets>  
         <a-entity>
             <a-camera look-controls id="camera" wasd-controls-enabled="false" position="0 0 0">
@@ -55,22 +69,38 @@
 
         <a-sky id="sky"></a-sky>
         <a-entity id="arrows-container">
-            <a-image id="clicker" opacity="0.5" src="#up-arrow" position="0 0 2">
-                <a-event name="mouseenter" opacity="1"></a-event>
-                <a-event name="mouseleave" opacity="0.5"></a-event>
+            <!-- all arrows will appear here thanks to mustache -->
+        </a-entity>
+    
+        <a-entity id="stickies-container">
+            <!-- all images will appear here thanks to mustache -->
+            <a-image src="panos/anqinglu/anqinglu.png"
+                     position="-0.25 -0.25 -1.5"
+                     rotation="0 0 0">
             </a-image>
+            <a-image src="panos/anqinglu/howtouse.png"
+                     position="0.75 -0.25 -1.5"
+                     rotation="0 0 0">
+            </a-image>
+            <a-image src="panos/anqinglu/aboutproject.gif"
+                     position="1 0.25 1"
+                     rotation="0 180 0">
+            </a-image>
+            <a-image src="panos/anqinglu/acknowledgements.gif"
+                     position="-0.5 -1 0"
+                     rotation="-90 90 0">
+            </a-image> 
         </a-entity>
         
-    </a-scene>
 
-    <script>
-        document.getElementById('clicker').addEventListener('click', function() {
-            //this.setAttribute('opacity', '1');
-            console.log('I was clicked!');
-        });
-    </script>
+        
+    </a-scene>
     
-    <script> //main logic
+    <script> 
+    //****************
+    // logic with a-frame. Much less cluttered than the same with webvr-boilerplate
+    //***************
+
     //load scene YAML
     var sceneyaml;
     var panoPath = '/panos/' + SCENENAME;
@@ -78,41 +108,69 @@
 
     function loadPanoramaImage(image){ //example input: 1.jpg
         
-        //first, set the sky
+        //before everything, make some buzz
+        if ("vibrate" in navigator) {
+	       // vibration API supported
+           navigator.vibrate(200);
+        }
+        
+        //and we tell the user that the browser is now busy loading stuff
+        var existingarrows = document.getElementsByClassName('arrow-clicker');
+        for (var i = 0; i < existingarrows.length; ++i) {
+            var oldarrow = existingarrows[i];  
+            console.log(oldarrow);
+            oldarrow.setAttribute('src', '#hourglass');
+            console.log(oldarrow);
+        }   
+        
+        
+        //now, we set the sky
         document.getElementById('sky').setAttribute('src', panoPath+ '/' + image);
         
         //then, populate the arrows
         var arrows = []; 
-        
+        var stickies = []; // both arrays must be empty so that old values from the last image can be flushed
+                            // stickies is a bad name
         for (var link in sceneyaml[image]) {
-            var arrow = {
-                position : clockPositionSettings[link].position,  
-                rotation: clockPositionSettings[link].rotation, 
-                target : sceneyaml[image][link]
+            if (!isNaN(link)){ //detect if the target is indeed jpg
+                var arrow = {
+                    position : clockPositionSettings[link].position,  
+                    rotation: clockPositionSettings[link].rotation, 
+                    target : sceneyaml[image][link]
+                }
+                arrows.push(arrow);
+                console.log("image has link " + link + " = " + sceneyaml[image][link]);
+            } else {
+                console.log("do something here");
+                var stickie = {
+                    position : sceneyaml[image][link]['position'],
+                    rotation : sceneyaml[image][link]['rotation'],
+                    source : panoPath + '/' + sceneyaml[image][link]['src'],
+                    opacity: sceneyaml[image][link]['opacity']
+                }
+                console.log(stickie);
+                stickies.push(stickie);
+                
             }
-            arrows.push(arrow);
-            console.log("image has link " + link + " = " + sceneyaml[image][link]);
 
         }
         var arrowsObject = {
             arrows: arrows
+        } //this is for mustache to recognise the object
+        
+        var stickiesObject = {
+            stickies: stickies
         }
+        
         var templ = document.getElementById('arrow-template').innerHTML;
-        //console.log(templ);
         var mustch = Mustache.to_html(templ, arrowsObject);
-        //console.log(mustch);
-        document.getElementById("arrows-container").innerHTML = mustch;   
+        document.getElementById("arrows-container").innerHTML = mustch;  
         
-        //after that, we tell arrows what to do when clicked
-        
-        /*var arrowsInScene = document.getElementById('arrows-container').childNodes; 
-        var arrowsInSceneArray = Array.prototype.slice.call(arrowsInScene);
-        for (var arrow in arrowsInSceneArray) {
-            console.log(arrow);
-            arrow.addEventListener('click', function() {
-                loadPanoramaImage(arrow.getAttribute('target'));
-            })
-        }*/
+        var templ2 = document.getElementById('stickies-template').innerHTML;
+        console.log(templ2);
+        var mustch2 = Mustache.to_html(templ2, stickiesObject);
+        console.log(mustch2);
+        document.getElementById("stickies-container").innerHTML = mustch2;
         
     }
 
@@ -122,8 +180,6 @@
             loadPanoramaImage(startingPoint);
     });
     
-
-
 
     
         

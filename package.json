@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/rlwhuang/vrshikumen/issues"
   },
-  "homepage": "https://github.com/rlwhuang/vrshikumen#readme"
+  "homepage": "https://github.com/rlwhuang/vrshikumen#readme",
+  "dependencies": {
+    "aframe-draw-component": "^1.4.0",
+    "aframe-text-component": "^0.3.0",
+    "aframe-textwrap-component": "^1.0.1"
+  }
 }
