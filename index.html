@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>vr-shikumen</title>
+    <meta name="description" content="Hello, World! • A-Frame">
+    <script src="node_modules/aframe/build/aframe.js"></script>
+    <!--script src="node_modules/aframe-template-component/dist/aframe-template-component.min.js"></script-->
+    <script src="node_modules/ismobilejs/isMobile.min.js"></script>
+    <script src="node_modules/zepto/zepto.min.js"></script>
+    <script src="node_modules/mustache/mustache.min.js"></script>
+    <script src="node_modules/yamljs/dist/yaml.min.js"></script>
+    
+    <script>
+
+    //global varibles declared here
+    var SCENENAME = 'anqinglu';
+    
+    </script>
+    
+    <script>
+    //First, load settings of clock positions
+    var clockPositionSettings; 
+    YAML.load('/data/positions.yaml', function(result){
+            clockPositionSettings = result;
+    });
+    </script>
+    
+
+</head>
+
+<style>
+    
+</style>
+    
+<body>
+    <a-scene>
+        <a-assets>
+            <img id="up-arrow" src="/assets/uparrow.gif">
+                <script id="arrow-template" type="text/template">
+        {{#arrows}}
+        <a-image class="clicker" opacity="0.5" src="#up-arrow" position="{{position}}" rotation="{{rotation}}" linktarget="{{target}}"  onclick="loadPanoramaImage('{{target}}')">
+            <a-event name="mouseenter" opacity="1"></a-event>
+            <a-event name="mouseleave" opacity="0.5"></a-event>
+        </a-image>
+        {{/arrows}}
+    </script>
+        </a-assets>  
+        <a-entity>
+            <a-camera look-controls id="camera" wasd-controls-enabled="false" position="0 0 0">
+                <a-cursor id="cursor" color="#4CC3D9" position="0 0 -1"></a-cursor>
+            </a-camera>
+        </a-entity>
+
+        <a-sky id="sky"></a-sky>
+        <a-entity id="arrows-container">
+            <a-image id="clicker" opacity="0.5" src="#up-arrow" position="0 0 2">
+                <a-event name="mouseenter" opacity="1"></a-event>
+                <a-event name="mouseleave" opacity="0.5"></a-event>
+            </a-image>
+        </a-entity>
+        
+    </a-scene>
+
+    <script>
+        document.getElementById('clicker').addEventListener('click', function() {
+            //this.setAttribute('opacity', '1');
+            console.log('I was clicked!');
+        });
+    </script>
+    
+    <script> //main logic
+    //load scene YAML
+    var sceneyaml;
+    var panoPath = '/panos/' + SCENENAME;
+    var startingPoint; 
+
+    function loadPanoramaImage(image){ //example input: 1.jpg
+        
+        //first, set the sky
+        document.getElementById('sky').setAttribute('src', panoPath+ '/' + image);
+        
+        //then, populate the arrows
+        var arrows = []; 
+        
+        for (var link in sceneyaml[image]) {
+            var arrow = {
+                position : clockPositionSettings[link].position,  
+                rotation: clockPositionSettings[link].rotation, 
+                target : sceneyaml[image][link]
+            }
+            arrows.push(arrow);
+            console.log("image has link " + link + " = " + sceneyaml[image][link]);
+
+        }
+        var arrowsObject = {
+            arrows: arrows
+        }
+        var templ = document.getElementById('arrow-template').innerHTML;
+        //console.log(templ);
+        var mustch = Mustache.to_html(templ, arrowsObject);
+        //console.log(mustch);
+        document.getElementById("arrows-container").innerHTML = mustch;   
+        
+        //after that, we tell arrows what to do when clicked
+        
+        /*var arrowsInScene = document.getElementById('arrows-container').childNodes; 
+        var arrowsInSceneArray = Array.prototype.slice.call(arrowsInScene);
+        for (var arrow in arrowsInSceneArray) {
+            console.log(arrow);
+            arrow.addEventListener('click', function() {
+                loadPanoramaImage(arrow.getAttribute('target'));
+            })
+        }*/
+        
+    }
+
+    YAML.load(panoPath + '/scene.yaml', function(result){
+            sceneyaml = result;
+            startingPoint = sceneyaml["starting-point"];
+            loadPanoramaImage(startingPoint);
+    });
+    
+
+
+
+    
+        
+    </script>
+</body>
+
+</html>

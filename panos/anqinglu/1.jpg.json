@@ -1,0 +1,8 @@
+[{
+    "clock":"twelve",
+    "destination": "2.jpg"
+}, {
+    "clock":"six",
+    "destination":"dr8.jpg",
+    "icon":"teleport.gif"
+}]
