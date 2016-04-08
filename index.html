@@ -7,7 +7,7 @@
     <meta name="description" content="Hello, World! • A-Frame">
     
     <!--aframe and its friends-->
-    <script src="node_modules/aframe/build/aframe.js"></script>
+    
     <!--script src="node_modules/aframe-draw-component/dist/aframe-draw-component.min.js"></script-->
     <!--script src="node_modules/aframe-textwrap-component/dist/aframe-textwrap-component.min.js"></script-->
     <!--script src="node_modules/aframe-text-component/dist/aframe-text-component.min.js"></script-->
@@ -17,13 +17,12 @@
     <script src="node_modules/mustache/mustache.min.js"></script>
     <script src="node_modules/yamljs/dist/yaml.min.js"></script>
     
+    <link rel="stylesheet" href="assets/loading.css">
+    
     <script>
-
     //global varibles declared here
     var SCENENAME = 'anqinglu';
-    
     </script>
-    
     <script>
     //First, load settings of clock positions
     var clockPositionSettings; 
@@ -31,8 +30,6 @@
             clockPositionSettings = result;
     });
     </script>
-    
-
 </head>
 
 <style>
@@ -40,6 +37,14 @@
 </style>
     
 <body>
+    <div id="loading-info">
+        <p>cardboard shikumen</p>
+        <p class="blink_me">loading resources</p>
+        <p>please wait, this can take a minute or two depending on your network connection. </p>
+        <p>we will be in virtual reality shortly. </p>
+        
+    </div>
+    <script src="node_modules/aframe/build/aframe.js"></script>
     <a-scene>
         <a-assets>
             <img id="up-arrow" src="/assets/uparrow.gif">
@@ -60,7 +65,22 @@
                     </a-image>
                 {{/stickies}}
             </script>
-        </a-assets>  
+        </a-assets> 
+            <!--script>
+    var assetsLoader = document.querySelector('a-assets');
+    assetsLoader.addEventListener('loaded',function(){
+       console.log('asset loaded'); 
+    
+    
+    });
+    assetsLoader.addEventListener('timeout',function(){
+       console.log('asset timeout'); 
+
+
+    });
+    </script-->
+    
+    
         <a-entity>
             <a-camera look-controls id="camera" wasd-controls-enabled="false" position="0 0 0">
                 <a-cursor id="cursor" color="#4CC3D9" position="0 0 -1"></a-cursor>
@@ -79,6 +99,8 @@
 
         
     </a-scene>
+    
+
     
     <script> 
     //****************
@@ -102,9 +124,9 @@
         var existingarrows = document.getElementsByClassName('arrow-clicker');
         for (var i = 0; i < existingarrows.length; ++i) {
             var oldarrow = existingarrows[i];  
-            console.log(oldarrow);
+            //console.log(oldarrow);
             oldarrow.setAttribute('src', '#hourglass');
-            console.log(oldarrow);
+            //console.log(oldarrow);
         }   
         
         
@@ -125,14 +147,14 @@
                 arrows.push(arrow);
                 console.log("image has link " + link + " = " + sceneyaml[image][link]);
             } else {
-                console.log("do something here");
+                //console.log("do something here");
                 var stickie = {
                     position : sceneyaml[image][link]['position'],
                     rotation : sceneyaml[image][link]['rotation'],
                     source : panoPath + '/' + sceneyaml[image][link]['src'],
                     opacity: sceneyaml[image][link]['opacity']
                 }
-                console.log(stickie);
+                //console.log(stickie);
                 stickies.push(stickie);
                 
             }
@@ -151,13 +173,14 @@
         document.getElementById("arrows-container").innerHTML = mustch;  
         
         var templ2 = document.getElementById('stickies-template').innerHTML;
-        console.log(templ2);
+        //console.log(templ2);
         var mustch2 = Mustache.to_html(templ2, stickiesObject);
-        console.log(mustch2);
+        //console.log(mustch2);
         document.getElementById("stickies-container").innerHTML = mustch2;
         
     }
 
+    //initialise
     YAML.load(panoPath + '/scene.yaml', function(result){
             sceneyaml = result;
             startingPoint = sceneyaml["starting-point"];

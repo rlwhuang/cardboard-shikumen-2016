@@ -58,6 +58,94 @@ dr6.jpg:
 dr7.jpg:
     12: dr8.jpg
     6: dr6.jpg
+    history5: 
+        position: -0.5 0 -1
+        rotation: 0 0 0
+        src: history5.gif
     
 dr8.jpg:
+    12: dr9.jpg
     6: dr7.jpg
+    history6: 
+        position: -0.7 -1 0.5
+        rotation: -90 90 0
+        src: history6.gif
+    history7: 
+        position: -0.7 -1 -0.5
+        rotation: -90 90 0
+        src: history7.gif
+    
+dr9.jpg:
+    12: dr10.jpg
+    6: dr8.jpg
+    history8: 
+        position: -0.5 0 -1
+        rotation: 0 0 0
+        src: history8.gif
+    history9: 
+        position: 0.5 0 -1
+        rotation: 0 0 0
+        src: history9.gif
+
+dr10.jpg:
+    12: dr11.jpg
+    6: dr9.jpg
+
+dr11.jpg:
+    12: dr12.jpg
+    6: dr10.jpg
+    history10: 
+        position: -0.7 -1 0.5
+        rotation: -90 90 0
+        src: history10.gif
+    history11: 
+        position: -0.7 -1 -0.5
+        rotation: -90 90 0
+        src: history11.gif
+
+dr12.jpg:
+    12: dr13.jpg
+    6: dr11.jpg
+    history12: 
+        position: -0.7 -1 0.5
+        rotation: -90 90 0
+        src: history12.gif
+    history13: 
+        position: -0.7 -1 -0.5
+        rotation: -90 90 0
+        src: history13.gif
+
+dr13.jpg:
+    12: dr14.jpg
+    6: dr12.jpg
+
+dr14.jpg:
+    12: dr15.jpg
+    6: dr13.jpg
+
+dr15.jpg:
+    12: dr16.jpg
+    6: dr14.jpg
+
+dr16.jpg:
+    12: dr17.jpg
+    6: dr15.jpg
+
+dr17.jpg:
+    12: dr18.jpg
+    6: dr16.jpg
+
+dr18.jpg:
+    12: dr19.jpg
+    6: dr17.jpg
+    
+dr19.jpg:
+    12: dr20.jpg
+    6: dr18.jpg
+
+dr20.jpg:
+    12: dr21.jpg
+    6: dr19.jpg
+
+dr21.jpg:
+    6: dr20.jpg
