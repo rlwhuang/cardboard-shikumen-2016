@@ -4,19 +4,10 @@
 <head>
     <meta charset="utf-8">
     <title>vr-shikumen</title>
-    <meta name="description" content="Hello, World! • A-Frame">
-    
-    <!--aframe and its friends-->
-    
-    <!--script src="node_modules/aframe-draw-component/dist/aframe-draw-component.min.js"></script-->
-    <!--script src="node_modules/aframe-textwrap-component/dist/aframe-textwrap-component.min.js"></script-->
-    <!--script src="node_modules/aframe-text-component/dist/aframe-text-component.min.js"></script-->
-    
-    <!--other logical stuff-->
+    <meta name="viewport" content="initial-scale=1.0">
     <script src="node_modules/ismobilejs/isMobile.min.js"></script>
     <script src="node_modules/mustache/mustache.min.js"></script>
     <script src="node_modules/yamljs/dist/yaml.min.js"></script>
-    
     <link rel="stylesheet" href="assets/loading.css">
     
     <script>
@@ -31,10 +22,6 @@
     });
     </script>
 </head>
-
-<style>
-    
-</style>
     
 <body>
     <div id="loading-info">
@@ -45,13 +32,14 @@
         
     </div>
     <script src="node_modules/aframe/build/aframe.js"></script>
+    <script src="node_modules/aframe-mouse-cursor-component/dist/aframe-mouse-cursor-component.min.js"></script>
     <a-scene>
         <a-assets>
             <img id="up-arrow" src="assets/uparrow.gif">
             <img id="hourglass" src="assets/hourglass.gif">
             <script id="arrow-template" type="text/template">
                 {{#arrows}}
-                    <a-image class="arrow-clicker" opacity="0.5" src="#up-arrow" position="{{position}}" rotation="{{rotation}}" linktarget="{{target}}"  onclick="loadPanoramaImage('{{target}}')">
+                    <a-image class="arrow-clicker" opacity="0.5" src="#up-arrow" position="{{position}}" rotation="{{rotation}}" linktarget="{{target}}" onclick="loadPanoramaImage('{{target}}')">
                         <a-event name="mouseenter" opacity="1"></a-event>
                         <a-event name="mouseleave" opacity="0.5"></a-event>
                     </a-image>
@@ -66,34 +54,29 @@
                 {{/stickies}}
             </script>
         </a-assets> 
-            <!--script>
-    var assetsLoader = document.querySelector('a-assets');
-    assetsLoader.addEventListener('loaded',function(){
-       console.log('asset loaded'); 
     
     
-    });
-    assetsLoader.addEventListener('timeout',function(){
-       console.log('asset timeout'); 
 
-
-    });
-    </script-->
-    
-    
         <a-entity>
-            <a-camera look-controls id="camera" wasd-controls-enabled="false" position="0 0 0">
+            <a-camera look-controls mouse-cursor id="camera" wasd-controls-enabled="false" position="0 0 0">
                 <a-cursor id="cursor" color="#4CC3D9" position="0 0 -1"></a-cursor>
             </a-camera>
         </a-entity>
-
+        
+        <script>
+            if (!(isMobile.any)) {
+                var cursorElement = document.getElementById("cursor");
+                cursorElement.parentNode.removeChild(cursorElement);
+            }
+        </script>
+        
         <a-sky id="sky"></a-sky>
         <a-entity id="arrows-container">
             <!-- all arrows will appear here thanks to mustache -->
         </a-entity>
     
         <a-entity id="stickies-container">
-
+            <!-- all stickies will appear here thanks to mustache -->
         </a-entity>
         
 
@@ -112,6 +95,11 @@
     var panoPath = 'panos/' + SCENENAME;
     var startingPoint; 
 
+
+    //**************************************************************
+    // loadPanoramaImage excutes during initialisation, and whenever
+    // a new panorama is loaded. 
+    //**************************************************************
     function loadPanoramaImage(image){ //example input: 1.jpg
         
         //before everything, make some buzz
@@ -120,13 +108,12 @@
            navigator.vibrate(200);
         }
         
-        //and we tell the user that the browser is now busy loading stuff
+        // and we tell the user that the browser is now busy loading stuff
+        // we do this by changing the arrow icons into hourglass icons
         var existingarrows = document.getElementsByClassName('arrow-clicker');
         for (var i = 0; i < existingarrows.length; ++i) {
             var oldarrow = existingarrows[i];  
-            //console.log(oldarrow);
             oldarrow.setAttribute('src', '#hourglass');
-            //console.log(oldarrow);
         }   
         
         
@@ -147,7 +134,7 @@
                 arrows.push(arrow);
                 console.log("image has link " + link + " = " + sceneyaml[image][link]);
             } else {
-                //console.log("do something here");
+                
                 var stickie = {
                     position : sceneyaml[image][link]['position'],
                     rotation : sceneyaml[image][link]['rotation'],
@@ -180,6 +167,9 @@
         
     }
 
+
+
+    
     //initialise
     YAML.load(panoPath + '/scene.yaml', function(result){
             sceneyaml = result;

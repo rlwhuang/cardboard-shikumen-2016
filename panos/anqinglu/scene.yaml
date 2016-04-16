@@ -1,8 +1,12 @@
 scene-name: anqinglu
-starting-point: dr4.jpg
+starting-point: dr3.jpg
+
+dr3.jpg:
+    12: dr4.jpg
 
 dr4.jpg:
     12: dr5.jpg
+    6: dr3.jpg
     cbshikumenlogo: 
         position: -1.25 -0.25 -1.5
         rotation: 0 0 0
