@@ -1,186 +1,83 @@
-<!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
-    <title>vr-shikumen</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <script src="node_modules/ismobilejs/isMobile.min.js"></script>
-    <script src="node_modules/mustache/mustache.min.js"></script>
-    <script src="node_modules/yamljs/dist/yaml.min.js"></script>
-    <link rel="stylesheet" href="assets/loading.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <script>
-    //global varibles declared here
-    var SCENENAME = 'anqinglu';
-    </script>
-    <script>
-    //First, load settings of clock positions
-    var clockPositionSettings; 
-    YAML.load('data/positions.yaml', function(result){
-            clockPositionSettings = result;
-    });
-    </script>
-</head>
-    
-<body>
-    <div id="loading-info">
-        <p>cardboard shikumen</p>
-        <p class="blink_me">loading resources</p>
-        <p>please wait, this can take a minute or two depending on your network connection. </p>
-        <p>we will be in virtual reality shortly. </p>
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="assets/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#000000">
         
-    </div>
-    <script src="node_modules/aframe/build/aframe.js"></script>
-    <script src="node_modules/aframe-mouse-cursor-component/dist/aframe-mouse-cursor-component.min.js"></script>
-    <a-scene>
-        <a-assets>
-            <img id="up-arrow" src="assets/uparrow.gif">
-            <img id="hourglass" src="assets/hourglass.gif">
-            <script id="arrow-template" type="text/template">
-                {{#arrows}}
-                    <a-image class="arrow-clicker" opacity="0.5" src="#up-arrow" position="{{position}}" rotation="{{rotation}}" linktarget="{{target}}" onclick="loadPanoramaImage('{{target}}')">
-                        <a-event name="mouseenter" opacity="1"></a-event>
-                        <a-event name="mouseleave" opacity="0.5"></a-event>
-                    </a-image>
-                {{/arrows}}
-            </script>
-            
-            <!--the opacity mumbo jumbo sets a default value of 1-->
-            <script id="stickies-template" type="text/template">
-                {{#stickies}}
-                    <a-image class="stickie-image" opacity="{{opacity}}{{^opacity}}1{{/opacity}}" src="{{source}}" position="{{position}}" rotation="{{rotation}}"> 
-                    </a-image>
-                {{/stickies}}
-            </script>
-        </a-assets> 
     
     
 
-        <a-entity>
-            <a-camera look-controls mouse-cursor id="camera" wasd-controls-enabled="false" position="0 0 0">
-                <a-cursor id="cursor" color="#4CC3D9" position="0 0 -1"></a-cursor>
-            </a-camera>
-        </a-entity>
-        
-        <script>
-            if (!(isMobile.any)) {
-                var cursorElement = document.getElementById("cursor");
-                cursorElement.parentNode.removeChild(cursorElement);
-            }
-        </script>
-        
-        <a-sky id="sky"></a-sky>
-        <a-entity id="arrows-container">
-            <!-- all arrows will appear here thanks to mustache -->
-        </a-entity>
+    <link href="https://necolas.github.io/normalize.css/4.1.1/normalize.css" rel="stylesheet">
+<style>
+
+    h3, p{
+        font-weight: 100;
+        font-size: 1.5em;
+    }
     
-        <a-entity id="stickies-container">
-            <!-- all stickies will appear here thanks to mustache -->
-        </a-entity>
-        
-
-        
-    </a-scene>
+    h3{
+        font-variant: small-caps;    
+    }
     
-
+    body{
+       
+        color: black;
+        padding: 1em;
+    }
     
-    <script> 
-    //****************
-    // logic with a-frame. Much less cluttered than the same with webvr-boilerplate
-    //***************
+    a{
+        border: 4px;
+        background-color: aliceblue;
+    }
+    
+    a:link {
+        text-decoration: none;
+    }
 
-    //load scene YAML
-    var sceneyaml;
-    var panoPath = 'panos/' + SCENENAME;
-    var startingPoint; 
+    a:visited {
+        text-decoration: none;
+    }
 
+    a:hover {
+        text-decoration: underline;
+        background-color: azure;
+    }
 
-    //**************************************************************
-    // loadPanoramaImage excutes during initialisation, and whenever
-    // a new panorama is loaded. 
-    //**************************************************************
-    function loadPanoramaImage(image){ //example input: 1.jpg
-        
-        //before everything, make some buzz
-        if ("vibrate" in navigator) {
-	       // vibration API supported
-           navigator.vibrate(200);
-        }
-        
-        // and we tell the user that the browser is now busy loading stuff
-        // we do this by changing the arrow icons into hourglass icons
-        var existingarrows = document.getElementsByClassName('arrow-clicker');
-        for (var i = 0; i < existingarrows.length; ++i) {
-            var oldarrow = existingarrows[i];  
-            oldarrow.setAttribute('src', '#hourglass');
-        }   
-        
-        
-        //now, we set the sky
-        document.getElementById('sky').setAttribute('src', panoPath+ '/' + image);
-        
-        //then, populate the arrows
-        var arrows = []; 
-        var stickies = []; // both arrays must be empty so that old values from the last image can be flushed
-                            // stickies is a bad name
-        for (var link in sceneyaml[image]) {
-            if (!isNaN(link)){ //detect if the target is indeed jpg
-                var arrow = {
-                    position : clockPositionSettings[link].position,  
-                    rotation: clockPositionSettings[link].rotation, 
-                    target : sceneyaml[image][link]
-                }
-                arrows.push(arrow);
-                console.log("image has link " + link + " = " + sceneyaml[image][link]);
-            } else {
-                
-                var stickie = {
-                    position : sceneyaml[image][link]['position'],
-                    rotation : sceneyaml[image][link]['rotation'],
-                    source : panoPath + '/' + sceneyaml[image][link]['src'],
-                    opacity: sceneyaml[image][link]['opacity']
-                }
-                //console.log(stickie);
-                stickies.push(stickie);
-                
-            }
-
-        }
-        var arrowsObject = {
-            arrows: arrows
-        } //this is for mustache to recognise the object
-        
-        var stickiesObject = {
-            stickies: stickies
-        }
-        
-        var templ = document.getElementById('arrow-template').innerHTML;
-        var mustch = Mustache.to_html(templ, arrowsObject);
-        document.getElementById("arrows-container").innerHTML = mustch;  
-        
-        var templ2 = document.getElementById('stickies-template').innerHTML;
-        //console.log(templ2);
-        var mustch2 = Mustache.to_html(templ2, stickiesObject);
-        //console.log(mustch2);
-        document.getElementById("stickies-container").innerHTML = mustch2;
-        
+    a:active {
+        text-decoration: underline;
     }
 
 
+</style>
+    
+</head>
 
+<body>
+    <main class="feature">
+    <h3>cardboard shikumen</h3>
+    <p>wander around a demolished traditional shikumen neighbourhood in Shanghai - in virtual reality.</p>
     
-    //initialise
-    YAML.load(panoPath + '/scene.yaml', function(result){
-            sceneyaml = result;
-            startingPoint = sceneyaml["starting-point"];
-            loadPanoramaImage(startingPoint);
-    });
     
-
     
+    
+    <div id="divbuttons">
+        <p><a id="enterbutton" class="button" href="index-vr.html">explore the neighbourhood > </a></p>
+         <p><a class="button" href="http://lewei.me/cbshikumen.html">about the project > </a></p>  
+        <p><a class="button" href="http://lewei.me/cbshikumen.html">more projects by the author > </a></p>  
+    </div>
         
-    </script>
+
+    </main>
 </body>
 
 </html>
