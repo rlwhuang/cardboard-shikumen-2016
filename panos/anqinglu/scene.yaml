@@ -23,11 +23,11 @@ dr4.jpg:
     12: dr5.jpg
     6: dr3.jpg
     aboutproject: 
-        position: -0.7 -1 0.5
+        position: -1 -1 0.5
         rotation: -90 90 0
         src: aboutproject.gif
     aboutproject2: 
-        position: -0.7 -1 -0.5
+        position: -1 -1 -0.5
         rotation: -90 90 0
         src: aboutproject2.gif
 
@@ -35,11 +35,11 @@ dr5.jpg:
     12: dr6.jpg
     6: dr4.jpg
     history1: 
-        position: -0.7 -1 0.5
+        position: -1 -1 0.5
         rotation: -90 90 0
         src: history1.gif
     history2: 
-        position: -0.7 -1 -0.5
+        position: -1 -1 -0.5
         rotation: -90 90 0
         src: history2.gif
     
@@ -51,11 +51,11 @@ dr7.jpg:
     12: dr8.jpg
     6: dr6.jpg
     history3: 
-        position: -0.7 -1 0.5
+        position: -1 -1 0.5
         rotation: -90 90 0
         src: history3.gif
     history4: 
-        position: -0.7 -1 -0.5
+        position: -1 -1 -0.5
         rotation: -90 90 0
         src: history4.gif
     
@@ -63,7 +63,7 @@ dr8.jpg:
     12: dr9.jpg
     6: dr7.jpg
     history5: 
-        position: -0.7 -1 0.2
+        position: -1 -1 0.2
         rotation: -90 90 0
         src: history5.gif
     
@@ -71,11 +71,11 @@ dr9.jpg:
     12: dr10.jpg
     6: dr8.jpg
     history6: 
-        position: -0.7 -1 1
+        position: -1 -1 1
         rotation: -90 90 0
         src: history6.gif
     history7: 
-        position: -0.7 -1 0
+        position: -1 -1 0
         rotation: -90 90 0
         src: history7.gif
 
@@ -87,11 +87,11 @@ dr11.jpg:
     12: dr12.jpg
     6: dr10.jpg
     history8: 
-        position: -0.7 -1 0.5
+        position: -1 -1 0.5
         rotation: -90 90 0
         src: history8.gif
     history9: 
-        position: -0.7 -1 -0.5
+        position: -1 -1 -0.5
         rotation: -90 90 0
         src: history9.gif
 
@@ -99,11 +99,11 @@ dr12.jpg:
     12: dr13.jpg
     6: dr11.jpg
     history10: 
-        position: -0.7 -1 0.5
+        position: -1 -1 0.5
         rotation: -90 90 0
         src: history10.gif
     history11: 
-        position: -0.7 -1 -0.5
+        position: -1 -1 -0.5
         rotation: -90 90 0
         src: history11.gif
 
@@ -111,11 +111,11 @@ dr13.jpg:
     12: dr14.jpg
     6: dr12.jpg
     history12: 
-        position: -0.7 -1 0.5
+        position: -1 -1 0.5
         rotation: -90 90 0
         src: history12.gif
     history13: 
-        position: -0.7 -1 -0.5
+        position: -1 -1 -0.5
         rotation: -90 90 0
         src: history13.gif
     acknowledgements: 

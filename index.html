@@ -16,13 +16,13 @@
         
     
     
-
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.6/zepto.min.js'></script>
     <link href="https://necolas.github.io/normalize.css/4.1.1/normalize.css" rel="stylesheet">
 <style>
     
     .feature{
         margin: auto;
-        max-width: 20em; 
+        max-width: 25em; 
     }
     
     h3, p{
@@ -63,9 +63,20 @@
     }
     
     img{
-        width: 50%;
+        max-width: 10em; 
         margin: auto;
     }
+    
+    .infopanels{
+        background: #EFEFEF;
+        font-size: 1em;
+        padding: 0.5em 1em;
+    }
+    
+    #techfaq ul{
+        list-style: none;
+    }
+
 
 </style>
     
@@ -74,13 +85,52 @@
 <body>
     <main class="feature">
     <div><img src="panos/anqinglu/cbshikumenlogo.png"></div>
-    <p>wander around a demolished traditional shikumen neighbourhood in Shanghai - in virtual reality.</p>
+    <p>wander around a demolished traditional <a href="en.wikipedia.org/wiki/Shikumen">Shikumen</a> neighbourhood in Shanghai - in virtual reality.</p>
     
     
     
     
     <div id="divbuttons">
-        <p><a id="enterbutton" class="button" href="index-vr.html">explore the neighbourhood > </a></p>
+        <script>
+            function togglePanel(panelId){
+                $('#' + panelId).toggle();
+            }
+        </script>
+        <p><a id="enterbutton" href="#" class="button" onclick="togglePanel('instructions');">explore the neighbourhood > </a></p>
+        
+        <div id="instructions" class="infopanels" style="display: none;">
+            <h3>before you start</h3>
+            <ul>
+            <li> Close other apps running on the background </li>
+            <li> Ensure your web browser (Google Chrome recommended) has been updated to the latest version <p><a id="enterbutton" class="button" href="index-vr.html">start> </a></p></li>
+            
+            </ul>
+            
+        
+        </div>
+         <p><a class="button" href="#" onclick="togglePanel('techfaq');">VR technical faq > </a></p>
+        <div id="techfaq" class="infopanels" style="display: none;">
+            <h3>vr technical faq</h3>
+            
+            <ul>
+            <li><strong>How to get VR experience in Cardboard Shikumen? </strong> </li>
+            <li>To get a VR experience in Cardboard Shikumen, you can either run the demo on a smartphone with Google Cardboard or on a WebVR-enabled desktop browser with a dedicated VR headset such as Oculus Rift (untested): <br \>
+            <ul>
+            <li> <br \>Smartphone requirements: iPhone (>= 5) or Android phone with gyroscope sensor released after 2013 (e.g. Moto X, Moto G 2, Samsung Galaxy S5, Google Nexus 5, etc). Cardboard version 2 (the version without magnets). </li>
+                <li> <br \>WebVR-enabled browser requirements: Experimental versions of Chrome or Firefox (available to download from <a href="https://webvr.info/">MozVR's website</a>). Dedicated VR headset should be configured per instructions on the website. </li>
+                <li> <br \> In both scenarios, a high-speed Internet connection is highly recommended. </li>
+            </ul>
+                
+                </li>
+            
+                <li><strong><br \>I encountered a blank screen / corrupt texture during use. What happened?  </strong> </li>
+                <li>The browser failed to render some of the elements. This can be caused by multiple factors. Under most circumstances, a reload should solve the problem. If the problem persists, check your internet connection, ensure your browser (Chrome recommended) is updated to the newest version, try to clear the cache of your browser, and try again. </li>
+                <li><br \>If the problem still persists after these steps are taken, please <a href="mailto://lewei.huang@nyu.edu">contact me</a>. </li>
+            
+            </ul>
+            
+        
+        </div>
          <p><a class="button" href="http://lewei.me/cbshikumen.html">about the project > </a></p>  
         <p><a class="button" href="http://lewei.me/">more projects by the author > </a></p>  
     </div>
