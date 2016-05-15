@@ -34,6 +34,7 @@ dr4.jpg:
 dr5.jpg:
     12: dr6.jpg
     6: dr4.jpg
+    9: cs1.jpg
     history1: 
         position: -1 -1 0.5
         rotation: -90 90 0
@@ -70,6 +71,7 @@ dr8.jpg:
 dr9.jpg:
     12: dr10.jpg
     6: dr8.jpg
+    9: cm1.jpg
     history6: 
         position: -1 -1 1
         rotation: -90 90 0
@@ -110,6 +112,7 @@ dr12.jpg:
 dr13.jpg:
     12: dr14.jpg
     6: dr12.jpg
+    9: cn1.jpg
     history12: 
         position: -1 -1 0.5
         rotation: -90 90 0
@@ -159,3 +162,50 @@ dr20.jpg:
 
 dr21.jpg:
     6: dr20.jpg
+
+cm1.jpg:
+    3: dr9.jpg
+    9: cm2.jpg
+
+cm2.jpg:
+    3: cm1.jpg
+    9: cm3.jpg
+
+cm3.jpg:
+    3: cm2.jpg
+    9: cm4.jpg
+
+cm4.jpg:
+    3: cm3.jpg
+    9: cm5.jpg
+
+cm5.jpg:
+    3: cm4.jpg
+    9: cm6.jpg
+
+cm6.jpg:
+    3: cm5.jpg
+    9: cm7.jpg
+
+cm7.jpg:
+    3: cm6.jpg
+    9: cm8.jpg
+
+cm8.jpg:
+    3: cm7.jpg
+    9: cm9.jpg
+
+cm9.jpg:
+    3: cm8.jpg
+    9: cm10.jpg
+
+cm10.jpg:
+    3: cm9.jpg
+    9: cm11.jpg
+
+cm10.jpg:
+    3: cm9.jpg
+    9: cm11.jpg
+
+cm11.jpg:
+    3: cm9.jpg
