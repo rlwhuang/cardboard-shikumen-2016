@@ -422,3 +422,23 @@ ng15.jpg:
 ng16.jpg:
     6: ng15.jpg
     3: xs14.jpg
+
+hn1.jpg:
+    12: xs0.jpg
+    6: hn2.jpg
+
+hn2.jpg:
+    9: hn3.jpg
+    12: hn1.jpg
+
+hn3.jpg:
+    3: hn2.jpg
+    9: hn4.jpg
+
+hn4.jpg:
+    3: hn3.jpg
+    9: hn5.jpg
+
+hn5.jpg:
+    3: hn4.jpg
+    9: ng1.jpg
